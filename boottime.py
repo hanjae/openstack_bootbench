@@ -11,8 +11,11 @@ test_id = "zboot_time_bench"
 # num_instances
 nr_instances = 4
 
+is_same_image = True
+
 # nova boot command
-boot_cmd = "nova boot --flavor m1.small --image ubuntu1 --nic net-id=fceb1bee-5e9d-4847-9bfb-9b8e13d86b87 --security-group default --key-name dcslab_testkey"
+# when use different images put %d at the end of imagename
+boot_cmd = "nova boot --flavor m1.small --image ubuntu%d --nic net-id=fceb1bee-5e9d-4847-9bfb-9b8e13d86b87 --security-group default --key-name dcslab_testkey"
 
 #boot_cmd = "nova boot --flavor m1.small --block-device source=image,id=c564612a-3977-4d1c-bd4b-5c21a85a5794,dest=volume,size=10,shutdown=preserve,bootindex=0 --nic net-id=fceb1bee-5e9d-4847-9bfb-9b8e13d86b87 --security-group default --key-name dcslab_testkey"
 
@@ -35,11 +38,18 @@ def delete_test_vms():
 delete_test_vms()
 
 # launch instances
-if nr_instances > 1:
-  boot_cmd += " --num-instances=" + str(nr_instances)
-boot_cmd += " " + test_id
-print "Create instances with command : " + boot_cmd
-os.popen(boot_cmd)
+if is_same_image:
+  if nr_instances > 1:
+    boot_cmd += " --num-instances=" + str(nr_instances)
+  boot_cmd += " " + test_id
+  print "Create instances with command : " + boot_cmd
+  os.popen(boot_cmd)
+else:
+  for i in range(nr_instances):
+    tmp_cmd = boot_cmd%i
+    tmp_cmd += " " + test_id + i
+    os.popen(tmp_cmd)
+    print "Create instances with command : " + tmp_cmd
 vm_start_time = curr_ms()
 
 #last one is empty
