@@ -9,11 +9,12 @@ import time
 test_id = "zboot_time_bench"
 
 # num_instances
-nr_instances = 40
+nr_instances = 4
 
 # nova boot command
-boot_cmd = "nova boot --flavor m1.small --image ubuntu --nic net-id=fde5fdd0-af64-440c-8580-433c16912f56 --security-group default --key-name dcslab_testkey"
+boot_cmd = "nova boot --flavor m1.small --image ubuntu1 --nic net-id=fceb1bee-5e9d-4847-9bfb-9b8e13d86b87 --security-group default --key-name dcslab_testkey"
 
+#boot_cmd = "nova boot --flavor m1.small --block-device source=image,id=c564612a-3977-4d1c-bd4b-5c21a85a5794,dest=volume,size=10,shutdown=preserve,bootindex=0 --nic net-id=fceb1bee-5e9d-4847-9bfb-9b8e13d86b87 --security-group default --key-name dcslab_testkey"
 
 def curr_ms():
         return int(round(time.time() * 1000))
@@ -69,13 +70,15 @@ class instanceTimerThread(threading.Thread):
 
                 print "ip found " + self.ip
 
+		time.sleep(10)
+
                 # try ssh
                 while True:
-                        ssh_result_str = os.popen("ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no ubuntu@%s echo ok"%self.ip).read()[0:2]
+                        ssh_result_str = os.popen("ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i dcslab_testkey ubuntu@%s echo ok"%self.ip).read()[0:2]
                         if ssh_result_str == "ok":
                                 instance_times[self.thread_id] = curr_ms() - self.start_time
                                 break
-			time.sleep(0.5)
+			time.sleep(1)
 
 instance_times = [None] * len(instance_names)
 threads = []
@@ -88,7 +91,7 @@ for theThread in threads:
         theThread.join()
 
 for i in range(len(instance_times)):
-        print instance_times[i]
+        print instance_times[i] / 1000.00
 
 # cleanup test vms
 delete_test_vms()
