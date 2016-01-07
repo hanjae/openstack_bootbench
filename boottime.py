@@ -19,8 +19,27 @@ is_volume = True
 boot_cmd = "nova boot --flavor m1.small --image ubuntu%d --nic net-id=fceb1bee-5e9d-4847-9bfb-9b8e13d86b87 --security-group default --key-name dcslab_testkey"
 volume_boot_cmd = "nova boot --flavor m1.small --block-device source=image,id=%s,dest=volume,size=10,shutdown=preserve,bootindex=0 --nic net-id=fceb1bee-5e9d-4847-9bfb-9b8e13d86b87 --security-group default --key-name dcslab_testkey"
 
-volume_ids = ["69220507-409a-456e-8aa7-601e54bf74fd", "b18f899a-07ad-42d3-8a39-6401cd3e41c1", "c54a09fe-2f99-4a9c-9ef9-2e58e59dc157", "e97d3a43-482a-4927-ae6c-53e23fb95cd3", "fbe40ec7-5506-49d8-b4b6-49ae0a843a29", "1d48a3bd-a960-4885-8fee-b25ac53c47d1", "8b84bc72-4fa9-4a0d-a807-05d8e70ebc02", "89a7170a-11e4-4384-92ee-f07fd310cd78", "9044565b-308c-4435-a756-feca87a65dd0", "2e4c13c5-d0aa-4ab0-91bf-b8d1c462a48a", "728d01fe-e46f-4a25-bde7-c4f5ccaee995", "45f02fff-35bd-4225-93ff-d0e1273d0700", "c63f42d0-a76d-492f-a49a-b106ef2fffcb", "75e620c2-25ca-475c-8b0f-88f7bb1811c8", "a47fc61e-aac8-460b-a177-234285a78cc3", "d2d00c4e-3e37-4c29-a7f8-69e3fdd8a296", "0c558189-63f6-4b7d-a650-c95b1318abe3", "2431fda6-c1f0-453c-aaeb-26e5a054b163", "523817c2-ed61-4251-816a-85d49b9be5f5", "6a1fd029-1876-4243-9117-c99a7faf1416"]
-
+volume_ids = [
+"607e11b3-6962-4e3c-aa82-94fac1fc423a",
+"1ee19ca6-1e1c-4e86-8e4e-4906f901f333",
+"f1ec96ce-f638-46b3-b8f9-132f45cd2019",
+"65e4860f-9f18-4888-922e-c95aa615bc80",
+"c4f73188-3aa9-417d-a9cb-00cf87ab4a2f",
+"3fb395f6-3ed2-4856-a7e3-c961f4cccfa4",
+"351f330a-d3f8-4a25-a5c8-ebab28f45172",
+"0c483779-5c2a-4851-9a7a-cd818f8e4bdd",
+"7d622b70-eeed-4e04-84b7-3e1f0b1589f5",
+"055b6ea0-12b8-4b29-b5d7-277f28511deb",
+"bcc478d3-3ce5-4a36-bc8a-61a75c28d611",
+"7cc06c23-b4d3-4791-9d92-3886f5d673f1",
+"b9683a7f-0618-4272-a8e2-b8985e905bea",
+"71931f3c-a381-4251-80ed-389da87ca548",
+"780d9597-8883-4b0b-a394-e0d3f0441ded",
+"28e04288-d7e7-419f-a72d-fdb01ca6c19f",
+"fdfe082e-fa15-49c5-a0bf-c8fe66808afe",
+"a9291d36-c915-4b03-a643-2615d4f4e060",
+"23acf85f-807b-4a55-80b6-1e16fd5d42c3",
+"3ac8ebb7-898a-4bc1-8326-001c55aa0c59"]
 
 def curr_ms():
   return int(round(time.time() * 1000))
@@ -52,7 +71,7 @@ if is_same_image:
     tmp_cmd = boot_cmd % 0
   if nr_instances > 1:
     tmp_cmd += " --num-instances=" + str(nr_instances)
-  boot_cmd += " " + test_id
+  tmp_cmd += " " + test_id
   print "Create instances with command : " + tmp_cmd
   os.popen(tmp_cmd)
 else:
