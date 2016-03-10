@@ -121,6 +121,7 @@ class instanceTimerThread(threading.Thread):
       ssh_result_str = os.popen("ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i dcslab_testkey ubuntu@%s echo ok"%self.ip).read()[0:2]
       if ssh_result_str == "ok":
         instance_times[self.thread_id] = curr_ms() - self.start_time
+        os.popen("ssh-keygen -f /root/.ssh/known_hosts -R %s"%self.ip).read()
         break
       time.sleep(1)
 
